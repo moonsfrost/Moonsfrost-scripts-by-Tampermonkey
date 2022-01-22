@@ -1,16 +1,10 @@
 // ==UserScript==
 // @name         Limiter
 // @namespace    http://tampermonkey.net/
-// @version      0.1.3
+// @version      1.0.0
 // @description  To focus on your study
 // @author       Moonsfrost
-// @match        *.bilibili.com/*
-// @match        *.mcmod.cn/*
-// @match        *.mcbbs.net/*
-// @match        *.ngabbs.com/*
-// @match        ngabbs.com/*
-// @match        www.zhihu.com/*
-// @match        localhost/*
+// @match        *
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant    GM_registerMenuCommand
@@ -50,10 +44,16 @@ let clear = GM_registerMenuCommand("Clear All the set(Only default left)",cc);
 
 let add = GM_registerMenuCommand("Add this website to banned list",add_website);
 
+
 (function() {
     'use strict'
     var s = GM_getValue("banlist");
-    if(s==undefined) reset();
-    //alert(s);
-    limit_behaviour();
+    if(s==undefined) {
+        reset();
+        s=GM_getValue("banlist");
+    }
+    var now = window.location.host;
+    for(var i = 0;i < s.length;i++){
+        if(now.indexOf(s[i])!=-1) limit_behaviour();
+    }
 })();
